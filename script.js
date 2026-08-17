@@ -4,6 +4,8 @@ const collections = {
       title: "Pardon",
       description:
         "Chrome extension website blocker requiring partner accountability.",
+      video: "morra-ai.mp4",
+
     },
     {
       title: "Morra Ai",
@@ -65,11 +67,7 @@ const faqItems = [
     answer: "Acrylic!! I love how fast-drying it is. Makes it super easy to layer colours and finish a piece in one sitting.",
     photos: ["art-1.png", "art-2.png", "art-3.png"],
   },
-  {
-    question: "best piece of advice you've received?",
-    answer: "Pursuing a pathway you're interested in will get you so much further than pursuing the thing you think will make you the most money. But if you don't like anything, just choose something and get really good at it ",
-    photos: ["advice-1.png", "advice-2.png", "advice-3.png"],
-  },
+
 ];
 
 const graphicsSlides = [
