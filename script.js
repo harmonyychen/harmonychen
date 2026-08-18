@@ -4,8 +4,6 @@ const collections = {
       title: "Pardon",
       description:
         "Chrome extension website blocker requiring partner accountability.",
-      video: "morra-ai.mp4",
-
     },
     {
       title: "Morra Ai",
