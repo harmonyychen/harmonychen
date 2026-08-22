@@ -151,8 +151,6 @@ decorHoverImages.forEach((image) => {
     });
   }
 
-  if (!window.matchMedia("(hover: hover)").matches) return;
-
   image.addEventListener("pointerenter", () => {
     showHoverImage();
     image.classList.add("is-hovered");

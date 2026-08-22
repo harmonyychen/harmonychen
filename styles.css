@@ -167,7 +167,7 @@ h1 {
   width: min(calc(100vw - 570px), 73vh, 798px);
   height: auto;
   aspect-ratio: 646 / 850;
-  pointer-events: none;
+  pointer-events: auto;
   transform: translateY(-50%);
 }
 
@@ -175,6 +175,7 @@ h1 {
   position: absolute;
   display: block;
   max-width: none;
+  pointer-events: none;
   user-select: none;
   transform: translateX(var(--narrow-decor-shift, 0px));
   will-change: transform;
@@ -191,7 +192,7 @@ h1 {
   transition: transform 300ms ease;
 }
 
-.hero-decor .decor-cat.is-hovered {
+.hero-decor .decor-cat:is(:hover, .is-hovered) {
   --decor-cat-scale: 1.2;
 }
 
@@ -202,7 +203,7 @@ h1 {
   transition: transform 300ms ease;
 }
 
-.hero-decor .decor-light.is-hovered {
+.hero-decor .decor-light:is(:hover, .is-hovered) {
   --decor-light-x: 6px;
   --decor-light-y: -6px;
 }
