@@ -49,6 +49,11 @@ button {
   justify-content: center;
   padding-inline: var(--page-padding);
   padding-top: clamp(20px, 8vh, 76px);
+  pointer-events: none;
+}
+
+.hero-inner a {
+  pointer-events: auto;
 }
 
 .work-inner {
@@ -178,6 +183,7 @@ h1 {
   pointer-events: none;
   user-select: none;
   transform: translateX(var(--narrow-decor-shift, 0px));
+  transition: transform 300ms ease;
   will-change: transform;
 }
 
@@ -193,7 +199,18 @@ h1 {
 }
 
 .hero-decor .decor-cat:is(:hover, .is-hovered) {
-  --decor-cat-scale: 1.2;
+  --decor-cat-scale: 1.5;
+}
+
+.hero-decor .decor-frame-2 {
+  transform: translateX(var(--narrow-decor-shift, 0px))
+    scale(var(--decor-frame-scale, 1));
+  transform-origin: center;
+  transition: transform 300ms ease;
+}
+
+.hero-decor .decor-frame-2:is(:hover, .is-hovered) {
+  --decor-frame-scale: 1.07;
 }
 
 .hero-decor .decor-light {
@@ -244,6 +261,18 @@ h1 {
 .decor-shelf-plant {
   z-index: 2;
   width: auto;
+}
+
+.hero-decor .decor-book {
+  cursor: pointer;
+  pointer-events: auto;
+  transform: translateX(var(--narrow-decor-shift, 0px))
+    translateY(var(--decor-book-y, 0px));
+  transition: transform 300ms ease;
+}
+
+.hero-decor .decor-book:hover {
+  --decor-book-y: -20px;
 }
 
 .decor-book-1 {
@@ -673,6 +702,22 @@ h1 {
   object-fit: contain;
 }
 
+@media (max-width: 700px) {
+  .category-tabs {
+    flex-wrap: nowrap;
+    gap: clamp(2px, 1vw, 8px);
+    width: 100%;
+  }
+
+  .category-tabs button {
+    flex: 0 1 auto;
+    min-width: 0;
+    padding-inline: clamp(2px, 1vw, 10px);
+    white-space: nowrap;
+    font-size: clamp(6px, 3vw, 21px);
+  }
+}
+
 @media (max-width: 660px) {
   :root {
     --page-padding: 60px;
@@ -706,17 +751,12 @@ h1 {
   }
 
   .category-tabs {
-    flex-wrap: wrap;
-    gap: 8px;
+    flex-wrap: nowrap;
+    gap: clamp(2px, 1vw, 8px);
     width: 100%;
     margin-bottom: 36px;
     padding: 2px 0 8px;
     overflow: visible;
-  }
-
-  .category-tabs button {
-    flex: 0 0 auto;
-    font-size: 21px;
   }
 
   .collection-grid {

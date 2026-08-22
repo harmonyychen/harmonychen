@@ -1,10 +1,10 @@
 const collections = {
   projects: [
-    {
+    /*{
       title: "Pardon",
       description:
         "Chrome extension website blocker requiring partner accountability.",
-    },
+    },*/
     {
       title: "Morra Ai",
       description:
@@ -23,6 +23,7 @@ const collections = {
       title: "Ignite Fair",
       description:
         "Leading 18 executives to create in-person events for 800+ students in the GTA.",
+        poster: "ignite-fair.JPG",
     },
   ],
   "case-study": [
@@ -84,6 +85,7 @@ const tabsContainer = document.querySelector(".category-tabs");
 const placeholderLinks = [...document.querySelectorAll("[data-placeholder-link]")];
 const hero = document.querySelector(".hero");
 const heroDecor = document.querySelector(".hero-decor");
+const decorLight = heroDecor?.querySelector(".decor-light");
 const heroTextElements = [
   ...document.querySelectorAll(".name-word, .intro, .bio p"),
 ];
@@ -208,6 +210,11 @@ function layoutHeroDecor() {
 
   heroDecor.style.left = `${decorLeft}px`;
   heroDecor.style.width = `${decorWidth}px`;
+  if (decorLight) {
+    const decorHeight = decorWidth * (850 / 646);
+    const decorTop = (hero.clientHeight - decorHeight) / 2;
+    decorLight.style.top = `${5 - decorTop}px`;
+  }
   narrowDecorShifts.forEach(({ element, finalShift }) => {
     if (!element) return;
     const compactShift = element.classList.contains("decor-cat")
