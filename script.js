@@ -18,12 +18,13 @@ const collections = {
       title: "HOSA Canada",
       description:
         "Managing workshops for 9,000+ students across Canada.",
+        poster: "hosa-poster.png",
     },
     {
       title: "Ignite Fair",
       description:
         "Leading 18 executives to create in-person events for 800+ students in the GTA.",
-        poster: "ignite-fair.JPG",
+      poster: "ignite-fair.JPG",
     },
   ],
   "case-study": [
@@ -319,6 +320,12 @@ function renderProjectCards(items) {
       video.setAttribute("aria-label", `${item.title} preview`);
 
       if (item.poster) video.poster = item.poster;
+    } else if (item.poster) {
+      const image = document.createElement("img");
+      image.className = "card-image";
+      image.src = item.poster;
+      image.alt = "";
+      media.replaceChildren(image);
     } else {
       video.remove();
     }
