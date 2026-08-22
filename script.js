@@ -11,6 +11,7 @@ const collections = {
         "AI-powered practice app for the IB French Individual Oral.",
       video: "morra-ai.mp4",
       poster: "morra-ai-poster.png",
+      url: "https://morrai-production.up.railway.app", // Replace with the public Morra AI URL.
     },
   ], 
   community: [
@@ -18,13 +19,15 @@ const collections = {
       title: "HOSA Canada",
       description:
         "Managing workshops for 9,000+ students across Canada.",
-        poster: "hosa-poster.png",
+      poster: "hosa-poster.png",
+      url: "https://www.hosacanada.org",
     },
     {
       title: "Ignite Fair",
       description:
         "Leading 18 executives to create in-person events for 800+ students in the GTA.",
       poster: "ignite-fair.JPG",
+      url: "https://www.ignitefair.org",
     },
   ],
   "case-study": [
@@ -49,7 +52,11 @@ const faqItems = [
   },
   {
     question: "something you’re proud of creating?",
-    answer: "Aporia Literary Journal, a poetry and visual arts journal with works by incredibly talented young people across Canada. Check it out at aporialiterary.ca!",
+    answer: "Aporia Literary Journal, a poetry and visual arts journal with works by incredibly talented young people across Canada. Check it out at",
+    answerLink: {
+      href: "https://www.aporialiterary.ca",
+      label: "aporialiterary.ca",
+    },
     photos: ["aporia-1.png", "aporia-2.png", "aporia-3.png"],
   },
   {
@@ -307,8 +314,17 @@ function renderProjectCards(items) {
     const card = cardFragment.querySelector(".project-card");
     const media = cardFragment.querySelector("[data-card-media]");
     const video = cardFragment.querySelector(".card-video");
+    const arrow = cardFragment.querySelector(".project-arrow");
 
     card.style.setProperty("--card-index", index);
+    if (item.url) {
+      card.href = item.url;
+      card.setAttribute("aria-label", `Open ${item.title} in a new tab`);
+    } else {
+      card.removeAttribute("target");
+      card.removeAttribute("rel");
+      arrow.remove();
+    }
     cardFragment.querySelector("[data-card-title]").textContent = item.title;
     cardFragment.querySelector("[data-card-description]").textContent =
       item.description;
@@ -350,6 +366,14 @@ function escapeHTML(value) {
   );
 }
 
+function faqAnswerHTML(item) {
+  const answer = escapeHTML(item.answer);
+
+  if (!item.answerLink) return answer;
+
+  return `${answer} <a class="faq-answer-link" href="${escapeHTML(item.answerLink.href)}" target="_blank" rel="noopener noreferrer">${escapeHTML(item.answerLink.label)}</a>!`;
+}
+
 function faqTemplate() {
   const questions = faqItems
     .map(
@@ -366,7 +390,7 @@ function faqTemplate() {
           </button>
           <div class="faq-answer" id="faq-answer-${index}" aria-hidden="true">
             <div class="faq-answer-inner">
-              <p>${escapeHTML(item.answer)}</p>
+              <p>${faqAnswerHTML(item)}</p>
             </div>
           </div>
         </div>

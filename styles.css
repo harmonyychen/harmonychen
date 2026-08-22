@@ -17,7 +17,7 @@ body {
   margin: 0;
   overflow-x: hidden;
   background: var(--paper);
-  color: var(--navy);
+  color: #111C49;
   font-family: Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
@@ -31,8 +31,8 @@ button {
   height: 100svh;
   min-height: 0;
   overflow: hidden;
-  background: var(--navy);
-  color: var(--white);
+  background: #111C49;
+  color: #ffffff;
 }
 
 .hero-inner,
@@ -62,7 +62,7 @@ button {
 
 h1 {
   margin: 0 0 22px -7px;
-  font-size: clamp(82px, 8.6vw, 130px);
+  font-size: clamp(90px, 8.6vw, 130px);
   font-weight: 700;
   line-height: 0.78;
   letter-spacing: -0.075em;
@@ -100,7 +100,7 @@ h1 {
 
 .bio {
   width: min(100%, 450px);
-  font-size: clamp(17.6px, 1.25vw, 21px);
+  font-size: clamp(18px, 1.25vw, 21px);
   line-height: 1.2;
   letter-spacing: -0.02em;
 }
@@ -113,8 +113,12 @@ h1 {
   margin: 0;
 }
 
+.bio p + p {
+  padding-top: 5px;
+}
+
 .bio-label {
-  margin-bottom: 3px !important;
+  margin-bottom: 0 !important;
   font-size: inherit;
 }
 
@@ -123,22 +127,20 @@ h1 {
   text-decoration-line: underline;
   text-decoration-style: dotted;
   text-decoration-thickness: 1px;
-  text-decoration-color: rgba(241, 240, 238, 0.38);
+  text-decoration-color: rgba(255, 255, 255, 0.38);
   text-underline-offset: 4px;
-  text-shadow: 0 0 0 rgba(255, 255, 255, 0);
+  text-shadow: 0 0 0 rgba(63, 56, 194, 0);
   transition: color 200ms ease, text-decoration-color 200ms ease,
     text-shadow 240ms ease;
 }
 
 .bio-link:hover {
-  color: #ffffff;
-  text-decoration-color: rgba(255, 255, 255, 0.86);
-  text-shadow: 0 0 6px rgba(255, 255, 255, 0.78),
-    0 0 14px rgba(255, 255, 255, 0.4);
+  color: rgb(173, 182, 215);
+  
 }
 
 .bio-link:focus-visible {
-  outline: 2px solid rgba(255, 255, 255, 0.78);
+  outline: 2px solid rgba(245, 241, 241, 0.78);
   outline-offset: 3px;
 }
 
@@ -413,11 +415,11 @@ h1 {
 
 .category-tabs button {
   appearance: none;
-  border: 2px solid var(--navy);
+  border: 2px solid #111C49;
   border-radius: 12px;
   padding: 4px 12px 5px;
   background: transparent;
-  color: var(--navy);
+  color: #111C49;
   cursor: pointer;
   font-size: 21px;
   line-height: 1;
@@ -426,13 +428,13 @@ h1 {
 }
 
 .category-tabs button[aria-selected="true"] {
-  background: var(--navy);
-  color: var(--white);
+  background: #111C49;
+  color: #ffffff;
 }
 
 .category-tabs button:hover {
-  background: var(--navy);
-  color: var(--white);
+  background: #111C49;
+  color: #ffffff;
 }
 
 .category-tabs button:focus-visible {
@@ -449,13 +451,21 @@ h1 {
 }
 
 .project-card {
+  display: block;
   width: 100%;
   max-width: 505px;
+  color: inherit;
+  text-decoration: none;
   opacity: 0;
   transform: translateY(20px);
   transition: opacity 680ms ease-in-out,
     transform 680ms cubic-bezier(0.22, 1, 0.36, 1);
   transition-delay: calc(var(--card-index) * 100ms);
+}
+
+.project-card:focus-visible {
+  outline: 3px solid #e97856;
+  outline-offset: 6px;
 }
 
 .project-card.is-visible {
@@ -469,7 +479,7 @@ h1 {
   margin-bottom: 14px;
   overflow: hidden;
   border-radius: 44px;
-  background: var(--navy);
+  background: #111C49;
   box-shadow: 0 0 0 rgba(17, 29, 79, 0);
 }
 
@@ -660,7 +670,7 @@ h1 {
 }
 
 .faq-item.is-open .faq-toggle {
-  background: var(--navy);
+  background: #111C49;
   box-shadow: inset 0 0 0 5px var(--paper);
   transform: rotate(180deg);
 }
@@ -687,6 +697,17 @@ h1 {
   letter-spacing: -0.02em;
   transform: translateY(-7px);
   transition: transform 480ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.faq-answer-link {
+  color: inherit;
+  text-decoration-line: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 3px;
+}
+
+.faq-answer-link:hover {
+  text-shadow: 0 0 8px rgba(98, 114, 179, 0.3);
 }
 
 .faq-item.is-open .faq-answer {
@@ -719,7 +740,6 @@ h1 {
 
 @media (max-width: 700px) {
   .category-tabs {
-    flex-wrap: nowrap;
     gap: clamp(2px, 1vw, 8px);
     width: 100%;
   }
@@ -729,7 +749,7 @@ h1 {
     min-width: 0;
     padding-inline: clamp(2px, 1vw, 10px);
     white-space: nowrap;
-    font-size: clamp(6px, 3vw, 21px);
+    font-size: clamp(16px, 3vw, 21px);
   }
 }
 
@@ -740,13 +760,13 @@ h1 {
 
   h1 {
     margin-left: -4px;
-    font-size: clamp(50px, 12.5vw, 82px);
+    font-size: clamp(90px, 15vw, 110px);
     line-height: 0.8;
   }
 
   .intro {
     max-width: 440px;
-    font-size: 20px;
+    font-size: 24px;
   }
 
   .bio-label {
@@ -754,7 +774,7 @@ h1 {
   }
 
   .bio {
-    font-size: 16px;
+    font-size: 18px;
   }
 
   .bio > div + div {
@@ -766,7 +786,7 @@ h1 {
   }
 
   .category-tabs {
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     gap: clamp(2px, 1vw, 8px);
     width: 100%;
     margin-bottom: 36px;
@@ -824,6 +844,89 @@ h1 {
   }
 }
 
+@media (max-width: 500px) {
+  :root {
+    --page-padding: 30px;
+  }
+
+  .hero {
+    height: auto;
+    min-height: 100svh;
+  }
+
+  .hero .hero-inner {
+    height: auto;
+    min-height: calc(100svh - 14px);
+    justify-content: flex-start;
+    padding-top: clamp(255px, 75vw, 310px);
+    padding-bottom: 60px;
+  }
+
+  .hero h1 {
+    margin-bottom: 16px;
+    font-size: clamp(90px, 24vw, 110px);
+    line-height: 0.78;
+  }
+
+  .hero .intro {
+    width: 100%;
+    max-width: 450px;
+    margin-bottom: 14px;
+    font-size: clamp(24px, 6.2vw, 29px);
+  }
+
+  .hero .bio {
+    width: 100%;
+    max-width: 450px;
+    font-size: clamp(18px, 4.7vw, 21px);
+  }
+
+  .hero-decor {
+    top: 0;
+    left: 0 !important;
+    width: 100% !important;
+    height: clamp(250px, 72vw, 300px);
+    aspect-ratio: auto;
+    transform: none;
+  }
+
+  .hero-decor img {
+    --narrow-decor-shift: 0px !important;
+  }
+
+  .hero-decor :is(.decor-cat, .decor-rug) {
+    display: none;
+  }
+
+  .hero-decor .decor-light {
+    top: 5px !important;
+    left: 42%;
+    width: auto !important;
+    height: clamp(220px, 65vw, 260px) !important;
+  }
+
+  .hero-decor .decor-frame-2 {
+    top: clamp(125px, 37vw, 150px);
+    left: 56%;
+    width: clamp(94px, 27vw, 118px) !important;
+    height: clamp(114px, 32.7vw, 143px) !important;
+  }
+
+  .work .category-tabs button {
+    font-size: clamp(14px, 3.6vw, 17px);
+  }
+
+  .work .project-card h2 {
+    font-size: clamp(18px, 4.6vw, 21px);
+  }
+
+  .work .project-card p,
+  .work .faq-question,
+  .work .faq-answer p {
+    font-size: clamp(15px, 4vw, 18px);
+  }
+}
+
 @media (max-height: 580px) {
   .hero-inner {
     padding-top: 18px;
@@ -831,12 +934,12 @@ h1 {
 
   h1 {
     margin-bottom: 12px;
-    font-size: clamp(50px, 16.5vw, 82px);
+    font-size: clamp(90px, 16.5vw, 110px);
   }
 
   .intro {
     margin-bottom: 12px;
-    font-size: 20px;
+    font-size: 24px;
   }
 
   .bio-label {
@@ -844,7 +947,7 @@ h1 {
   }
 
   .bio {
-    font-size: 16px;
+    font-size: 18px;
   }
 
   .bio > div + div {
