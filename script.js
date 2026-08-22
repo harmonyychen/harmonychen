@@ -42,6 +42,7 @@ function finishPreloader() {
     if (preloaderFrameTimer) window.clearInterval(preloaderFrameTimer);
     document.body.classList.remove("is-loading");
     document.documentElement.classList.add("is-ready");
+    window.requestAnimationFrame(() => initializeCardVideos(document));
 
     if (!sitePreloader) return;
     sitePreloader.classList.add("is-leaving");
@@ -378,6 +379,23 @@ function observeProjectCards() {
   initializeCardVideos(panel);
 }
 
+function playCardVideo(video) {
+  if (!video.isConnected || document.hidden) return;
+  const playback = video.play();
+  if (playback) playback.catch(() => {});
+}
+
+const cardVideoObserver = "IntersectionObserver" in window
+  ? new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) playCardVideo(entry.target);
+        });
+      },
+      { threshold: 0.01 },
+    )
+  : null;
+
 function initializeCardVideos(container) {
   container.querySelectorAll(".card-video").forEach((video) => {
     video.muted = true;
@@ -386,18 +404,25 @@ function initializeCardVideos(container) {
     video.loop = true;
     video.playsInline = true;
 
-    const playVideo = () => {
-      if (!video.isConnected || document.hidden) return;
-      const playback = video.play();
-      if (playback) playback.catch(() => {});
-    };
+    if (video.dataset.autoplayReady === "true") {
+      playCardVideo(video);
+      return;
+    }
+
+    video.dataset.autoplayReady = "true";
+    video.addEventListener("canplay", () => playCardVideo(video), {
+      once: true,
+    });
+    cardVideoObserver?.observe(video);
 
     if (video.readyState >= 2) {
-      playVideo();
+      playCardVideo(video);
     } else {
-      video.addEventListener("loadeddata", playVideo, { once: true });
       video.load();
     }
+
+    window.requestAnimationFrame(() => playCardVideo(video));
+    window.setTimeout(() => playCardVideo(video), 300);
   });
 }
 
@@ -513,7 +538,7 @@ function faqTemplate() {
     <div class="ifaq-layout">
       <div class="faq-list">${questions}</div>
       <div class="ifaq-image" aria-hidden="true" hidden>
-        <img src="og.png" alt="">
+        <img alt="">
       </div>
     </div>
   `;
@@ -579,7 +604,7 @@ function stopPhotoRotation() {
   if (!image) return;
 
   image.classList.remove("is-rotating-photo");
-  image.src = "og.png";
+  image.removeAttribute("src");
 }
 
 function hideFAQImage() {
@@ -587,13 +612,6 @@ function hideFAQImage() {
 
   const imageCard = panel.querySelector(".ifaq-image");
   if (imageCard) imageCard.hidden = true;
-}
-
-function showFAQPlaceholder() {
-  stopPhotoRotation();
-
-  const imageCard = panel.querySelector(".ifaq-image");
-  if (imageCard) imageCard.hidden = false;
 }
 
 function startPhotoRotation(sources) {
@@ -646,7 +664,7 @@ function bindFAQAccordions() {
       if (willOpen && photoSet) {
         startPhotoRotation(photoSet);
       } else if (willOpen) {
-        showFAQPlaceholder();
+        hideFAQImage();
       } else {
         hideFAQImage();
       }
