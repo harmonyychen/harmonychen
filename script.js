@@ -1,3 +1,65 @@
+const preloaderFrames = [
+  "preloader-1.png",
+  "preloader-2.png",
+  "preloader-3.png",
+  "preloader-4.png",
+  "preloader-5.png",
+  "preloader-6.png",
+];
+const sitePreloader = document.querySelector("#site-preloader");
+const preloaderImage = document.querySelector("#preloader-frame");
+const preloaderStartedAt = performance.now();
+const prefersReducedMotion = window.matchMedia(
+  "(prefers-reduced-motion: reduce)",
+).matches;
+let preloaderFrameIndex = 0;
+let preloaderFrameTimer = null;
+let preloaderHasFinished = false;
+
+preloaderFrames.slice(1).forEach((source) => {
+  const frame = new Image();
+  frame.src = source;
+});
+
+if (sitePreloader && preloaderImage && !prefersReducedMotion) {
+  preloaderFrameTimer = window.setInterval(() => {
+    preloaderFrameIndex = (preloaderFrameIndex + 1) % preloaderFrames.length;
+    preloaderImage.src = preloaderFrames[preloaderFrameIndex];
+  }, 200);
+}
+
+function finishPreloader() {
+  if (preloaderHasFinished) return;
+  preloaderHasFinished = true;
+
+  const minimumDuration = prefersReducedMotion ? 0 : 1200;
+  const remainingDuration = Math.max(
+    0,
+    minimumDuration - (performance.now() - preloaderStartedAt),
+  );
+
+  window.setTimeout(() => {
+    if (preloaderFrameTimer) window.clearInterval(preloaderFrameTimer);
+    document.body.classList.remove("is-loading");
+    document.documentElement.classList.add("is-ready");
+
+    if (!sitePreloader) return;
+    sitePreloader.classList.add("is-leaving");
+
+    const removePreloader = () => sitePreloader.remove();
+    sitePreloader.addEventListener("transitionend", removePreloader, {
+      once: true,
+    });
+    window.setTimeout(removePreloader, 600);
+  }, remainingDuration);
+}
+
+if (document.readyState === "complete") {
+  finishPreloader();
+} else {
+  window.addEventListener("load", finishPreloader, { once: true });
+}
+
 const collections = {
   projects: [
     /*{
@@ -12,6 +74,7 @@ const collections = {
       video: "morra-ai.mp4",
       poster: "morra-ai-poster.png",
       url: "https://morrai-production.up.railway.app", // Replace with the public Morra AI URL.
+      tags: ["Full-Stack Development", "Product Design"],
     },
   ], 
   community: [
@@ -21,6 +84,7 @@ const collections = {
         "Managing workshops for 9,000+ students across Canada.",
       poster: "hosa-poster.png",
       url: "https://www.hosacanada.org",
+      tags: ["Project Management", "Education"],
     },
     {
       title: "Ignite Fair",
@@ -28,6 +92,7 @@ const collections = {
         "Leading 18 executives to create in-person events for 800+ students in the GTA.",
       poster: "ignite-fair.JPG",
       url: "https://www.ignitefair.org",
+      tags: ["Leadership", "Project Management"],
     },
   ],
   "case-study": [
@@ -37,6 +102,7 @@ const collections = {
         "Market research and product decisions for Abercrombie's athleisure sub-brand, YPB.",
       video: "case-competition.mp4",
       poster: "case-competition-poster.png",
+      tags: ["Competition Winner", "Product Strategy"],
     },
   ],
   graphics: [
@@ -97,6 +163,7 @@ const decorLight = heroDecor?.querySelector(".decor-light");
 const heroTextElements = [
   ...document.querySelectorAll(".name-word, .intro, .bio p"),
 ];
+const bioLines = [...document.querySelectorAll(".bio p")];
 const decorHoverImages = [
   ...document.querySelectorAll(".hero-decor img[data-hover-src]"),
 ];
@@ -121,6 +188,10 @@ const rotatingPhotos = faqItems.flatMap((item) => item.photos || []);
 let photoRotationTimer = null;
 let photoRotationIndex = 0;
 let heroLayoutFrame = null;
+
+bioLines.forEach((line, index) => {
+  line.style.setProperty("--bio-line-delay", `${560 + index * 90}ms`);
+});
 
 decorHoverImages.forEach((image) => {
   const defaultSource = image.getAttribute("src");
@@ -315,6 +386,7 @@ function renderProjectCards(items) {
     const media = cardFragment.querySelector("[data-card-media]");
     const video = cardFragment.querySelector(".card-video");
     const arrow = cardFragment.querySelector(".project-arrow");
+    const pills = cardFragment.querySelector("[data-card-pills]");
 
     card.style.setProperty("--card-index", index);
     if (item.url) {
@@ -329,6 +401,17 @@ function renderProjectCards(items) {
     cardFragment.querySelector("[data-card-description]").textContent =
       item.description;
 
+    if (item.tags?.length) {
+      item.tags.forEach((tag) => {
+        const pill = document.createElement("span");
+        pill.className = "card-pill";
+        pill.textContent = tag;
+        pills.append(pill);
+      });
+    } else {
+      pills.remove();
+    }
+
     if (item.video) {
       media.classList.add("card-art-video");
       media.setAttribute("aria-hidden", "false");
@@ -341,7 +424,7 @@ function renderProjectCards(items) {
       image.className = "card-image";
       image.src = item.poster;
       image.alt = "";
-      media.replaceChildren(image);
+      video.replaceWith(image);
     } else {
       video.remove();
     }
@@ -628,4 +711,4 @@ layoutHeroDecor();
 renderProjectCards(collections.projects);
 observeReveal(tabsContainer);
 observeProjectCards();
-document.documentElement.classList.add("is-ready");
+if (!sitePreloader) document.documentElement.classList.add("is-ready");

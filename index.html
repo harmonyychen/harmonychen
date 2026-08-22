@@ -23,7 +23,27 @@
     <link rel="stylesheet" href="styles.css" />
     <script src="script.js" defer></script>
   </head>
-  <body>
+  <body class="is-loading">
+    <div
+      class="site-preloader"
+      id="site-preloader"
+      role="status"
+      aria-live="polite"
+      aria-label="Website loading"
+    >
+      <div class="preloader-content">
+        <div class="preloader-art" aria-hidden="true">
+          <img
+            id="preloader-frame"
+            src="preloader-1.png"
+            alt=""
+            fetchpriority="high"
+          >
+        </div>
+        <p>loading...</p>
+      </div>
+    </div>
+    <noscript><style>.site-preloader{display:none}body.is-loading{overflow:auto}</style></noscript>
     <main>
       <section class="hero" aria-labelledby="page-title">
         <div class="hero-inner">
@@ -155,6 +175,7 @@
           >
             Your browser does not support embedded video.
           </video>
+          <div class="card-pills" data-card-pills aria-hidden="true"></div>
         </div>
         <h2>
           <span data-card-title></span>
