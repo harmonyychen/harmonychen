@@ -82,9 +82,152 @@ const projectCardTemplate = document.querySelector("#project-card-template");
 const tabs = [...document.querySelectorAll('[role="tab"]')];
 const tabsContainer = document.querySelector(".category-tabs");
 const placeholderLinks = [...document.querySelectorAll("[data-placeholder-link]")];
+const hero = document.querySelector(".hero");
+const heroDecor = document.querySelector(".hero-decor");
+const heroTextElements = [
+  ...document.querySelectorAll(".name-word, .intro, .bio p"),
+];
+const decorHoverImages = [
+  ...document.querySelectorAll(".hero-decor img[data-hover-src]"),
+];
+const narrowDecorShifts = [
+  [".decor-light", 0],
+  [".decor-rug", 20],
+  [".decor-cat", 25],
+  [".decor-frame-1", 68],
+  [".decor-frame-3", 58],
+  [".decor-frame-2", 62],
+  [".decor-shelf", 98],
+  [".decor-book-1", 108],
+  [".decor-book-2", 106],
+  [".decor-book-3", 104],
+  [".decor-shelf-plant", 107],
+  [".decor-plant", 170],
+].map(([selector, finalShift]) => ({
+  element: heroDecor?.querySelector(selector),
+  finalShift,
+}));
 const rotatingPhotos = faqItems.flatMap((item) => item.photos || []);
 let photoRotationTimer = null;
 let photoRotationIndex = 0;
+let heroLayoutFrame = null;
+
+decorHoverImages.forEach((image) => {
+  const defaultSource = image.getAttribute("src");
+  const hoverSource = image.dataset.hoverSrc;
+  const isLight = image.classList.contains("decor-light");
+  let isLocked = false;
+  const preload = new Image();
+  preload.src = hoverSource;
+
+  const preserveImageBox = () => {
+    if (image.style.width && image.style.height) return;
+    const bounds = image.getBoundingClientRect();
+    image.style.width = `${bounds.width}px`;
+    image.style.height = `${bounds.height}px`;
+    image.style.objectFit = "contain";
+  };
+
+  const showHoverImage = () => {
+    preserveImageBox();
+    image.src = hoverSource;
+  };
+
+  const showDefaultImage = () => {
+    image.src = defaultSource;
+    image.style.removeProperty("width");
+    image.style.removeProperty("height");
+    image.style.removeProperty("object-fit");
+  };
+
+  if (isLight) {
+    image.addEventListener("click", () => {
+      isLocked = !isLocked;
+      if (isLocked) {
+        showHoverImage();
+      } else {
+        showDefaultImage();
+      }
+    });
+  }
+
+  if (!window.matchMedia("(hover: hover)").matches) return;
+
+  image.addEventListener("pointerenter", () => {
+    showHoverImage();
+    image.classList.add("is-hovered");
+  });
+
+  const endHover = () => {
+    image.classList.remove("is-hovered");
+    if (!isLocked) showDefaultImage();
+  };
+
+  image.addEventListener("pointerleave", endHover);
+  image.addEventListener("pointercancel", endHover);
+});
+
+function getTextContentRight(element) {
+  const range = document.createRange();
+  range.selectNodeContents(element);
+  const bounds = range.getBoundingClientRect();
+  range.detach();
+  return bounds.right;
+}
+
+function layoutHeroDecor() {
+  if (!hero || !heroDecor || !heroTextElements.length) return;
+
+  const heroBounds = hero.getBoundingClientRect();
+  const textRight = Math.max(
+    ...heroTextElements.map(getTextContentRight),
+  ) - heroBounds.left;
+  const narrowProgress = Math.min(
+    1,
+    Math.max(0, (1100 - hero.clientWidth) / 250),
+  );
+  const isNarrowLayout = hero.clientWidth < 1100;
+  const isCompactLayout = hero.clientWidth < 850;
+  const decorLeft = isCompactLayout
+    ? hero.clientWidth * 0.64
+    : textRight + 10;
+  const availableWidth = Math.max(
+    0,
+    (hero.clientWidth - decorLeft - 50) / 1.06,
+  );
+  const responsiveWidth = isCompactLayout
+    ? Math.min(484.5, Math.max(345, hero.clientWidth * 1.5))
+    : isNarrowLayout
+      ? 500
+      : Math.max(0, hero.clientWidth - 550);
+  const heightLimitedWidth = hero.clientHeight * 0.73;
+  const decorWidth = Math.min(
+    798,
+    responsiveWidth,
+    isNarrowLayout ? Infinity : heightLimitedWidth,
+    isNarrowLayout ? Infinity : availableWidth,
+  );
+
+  heroDecor.style.left = `${decorLeft}px`;
+  heroDecor.style.width = `${decorWidth}px`;
+  narrowDecorShifts.forEach(({ element, finalShift }) => {
+    if (!element) return;
+    const compactShift = element.classList.contains("decor-cat")
+      ? 41
+      : element.classList.contains("decor-rug")
+        ? 17
+        : finalShift;
+    element.style.setProperty(
+      "--narrow-decor-shift",
+      `${narrowProgress * -(isCompactLayout ? compactShift * 1.5 : finalShift)}px`,
+    );
+  });
+}
+
+function requestHeroDecorLayout() {
+  window.cancelAnimationFrame(heroLayoutFrame);
+  heroLayoutFrame = window.requestAnimationFrame(layoutHeroDecor);
+}
 
 rotatingPhotos.forEach((source) => {
   const photo = new Image();
@@ -433,6 +576,19 @@ document.addEventListener("visibilitychange", () => {
   if (!document.hidden) initializeCardVideos(panel);
 });
 
+window.addEventListener("resize", requestHeroDecorLayout, { passive: true });
+window.addEventListener("load", requestHeroDecorLayout, { once: true });
+
+if ("ResizeObserver" in window && hero) {
+  const heroResizeObserver = new ResizeObserver(requestHeroDecorLayout);
+  heroResizeObserver.observe(hero);
+}
+
+if (document.fonts?.ready) {
+  document.fonts.ready.then(requestHeroDecorLayout);
+}
+
+layoutHeroDecor();
 renderProjectCards(collections.projects);
 observeReveal(tabsContainer);
 observeProjectCards();
