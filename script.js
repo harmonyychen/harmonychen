@@ -60,6 +60,34 @@ if (document.readyState === "complete") {
   window.addEventListener("load", finishPreloader, { once: true });
 }
 
+const emailContact = document.querySelector(".email-contact");
+const emailTrigger = document.querySelector(".email-trigger");
+
+function closeEmailBubble() {
+  if (!emailContact || !emailTrigger) return;
+  emailContact.classList.remove("is-open");
+  emailTrigger.setAttribute("aria-expanded", "false");
+}
+
+if (emailContact && emailTrigger) {
+  emailTrigger.addEventListener("click", () => {
+    const willOpen = !emailContact.classList.contains("is-open");
+    emailContact.classList.toggle("is-open", willOpen);
+    emailTrigger.setAttribute("aria-expanded", String(willOpen));
+  });
+
+  document.addEventListener("click", (event) => {
+    if (!emailContact.contains(event.target)) closeEmailBubble();
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      closeEmailBubble();
+      emailTrigger.focus();
+    }
+  });
+}
+
 const collections = {
   projects: [
     /*{

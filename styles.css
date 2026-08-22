@@ -88,6 +88,82 @@ button {
   color: #ffffff;
 }
 
+.social-links {
+  position: absolute;
+  z-index: 4;
+  top: clamp(18px, 2.2vw, 34px);
+  right: var(--page-padding);
+  display: flex;
+  align-items: center;
+  gap: clamp(8px, 0.8vw, 12px);
+}
+
+.social-link {
+  display: grid;
+  width: clamp(24px, 2.1vw, 32px);
+  padding: 0;
+  border: 0;
+  aspect-ratio: 1;
+  place-items: center;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  opacity: 0.82;
+  transition: opacity 220ms ease, transform 220ms ease;
+}
+
+.social-link img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.email-contact {
+  position: relative;
+}
+
+.email-contact::after {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 100%;
+  height: 8px;
+  content: "";
+}
+
+.email-bubble {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: max-content;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(126, 139, 183, 0.58);
+  color: #e8ecf4;
+  font-size: clamp(15px, 1.4vw, 20px);
+  line-height: 1.1;
+  text-decoration: none;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-5px);
+  transition: opacity 200ms ease, transform 200ms ease;
+}
+
+.email-contact:is(:hover, :focus-within, .is-open) .email-bubble {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .social-link:hover {
+    opacity: 1;
+  }
+}
+
 .hero-inner,
 .work-inner {
   width: 100%;
@@ -986,6 +1062,21 @@ h1 {
   .hero {
     height: 100svh;
     min-height: 0;
+  }
+
+  .social-links {
+    top: 16px;
+    right: var(--page-padding);
+    gap: 8px;
+  }
+
+  .social-link {
+    width: 23px;
+  }
+
+  .email-bubble {
+    padding: 5px 10px;
+    font-size: 14px;
   }
 
   .hero .hero-inner {
