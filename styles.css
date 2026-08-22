@@ -62,10 +62,10 @@ button {
 
 h1 {
   margin: 0 0 22px -7px;
-  font-size: clamp(90px, 8.6vw, 130px);
+  font-size: clamp(85px, 8.6vw, 130px);
   font-weight: 700;
   line-height: 0.78;
-  letter-spacing: -0.075em;
+  letter-spacing: -0.05em;
 }
 
 .name-word {
@@ -100,7 +100,7 @@ h1 {
 
 .bio {
   width: min(100%, 450px);
-  font-size: clamp(18px, 1.25vw, 21px);
+  font-size: clamp(16px, 1.25vw, 21px);
   line-height: 1.2;
   letter-spacing: -0.02em;
 }
@@ -760,13 +760,13 @@ h1 {
 
   h1 {
     margin-left: -4px;
-    font-size: clamp(90px, 15vw, 110px);
+    font-size: clamp(80px, 15vw, 110px);
     line-height: 0.8;
   }
 
   .intro {
     max-width: 440px;
-    font-size: 24px;
+    font-size: 21px;
   }
 
   .bio-label {
@@ -774,7 +774,7 @@ h1 {
   }
 
   .bio {
-    font-size: 18px;
+    font-size: 16px;
   }
 
   .bio > div + div {
@@ -846,46 +846,55 @@ h1 {
 
 @media (max-width: 500px) {
   :root {
-    --page-padding: 30px;
+    --page-padding: 25px;
   }
 
   .hero {
-    height: auto;
-    min-height: 100svh;
+    height: 100svh;
+    min-height: 0;
   }
 
   .hero .hero-inner {
-    height: auto;
-    min-height: calc(100svh - 14px);
+    height: calc(100% - 14px);
+    min-height: 0;
     justify-content: flex-start;
-    padding-top: clamp(255px, 75vw, 310px);
-    padding-bottom: 60px;
+    padding-top: 38.5svh;
+    padding-bottom: 20px;
   }
 
   .hero h1 {
-    margin-bottom: 16px;
-    font-size: clamp(90px, 24vw, 110px);
+    margin-bottom: 10px;
+    font-size: clamp(62px, min(20vw, 10svh), 76px);
     line-height: 0.78;
   }
 
   .hero .intro {
     width: 100%;
     max-width: 450px;
-    margin-bottom: 14px;
-    font-size: clamp(24px, 6.2vw, 29px);
+    margin-bottom: 10px;
+    font-size: clamp(17px, min(5vw, 2.4svh), 19px);
   }
 
   .hero .bio {
     width: 100%;
     max-width: 450px;
-    font-size: clamp(18px, 4.7vw, 21px);
+    font-size: clamp(12px, min(3.2vw, 1.5svh), 16px);
+    line-height: 1.15;
+  }
+
+  .hero .bio p + p {
+    padding-top: 2px;
+  }
+
+  .hero .bio > div + div {
+    margin-top: clamp(12px, 1.8svh, 16px);
   }
 
   .hero-decor {
     top: 0;
     left: 0 !important;
     width: 100% !important;
-    height: clamp(250px, 72vw, 300px);
+    height: 38.5svh;
     aspect-ratio: auto;
     transform: none;
   }
@@ -900,16 +909,18 @@ h1 {
 
   .hero-decor .decor-light {
     top: 5px !important;
-    left: 42%;
+    right: calc(var(--page-padding) + 20svh);
+    left: auto !important;
     width: auto !important;
-    height: clamp(220px, 65vw, 260px) !important;
+    height: 35svh !important;
   }
 
   .hero-decor .decor-frame-2 {
-    top: clamp(125px, 37vw, 150px);
-    left: 56%;
-    width: clamp(94px, 27vw, 118px) !important;
-    height: clamp(114px, 32.7vw, 143px) !important;
+    top: 8svh;
+    right: var(--page-padding);
+    left: auto !important;
+    width: 24.78svh !important;
+    height: 30svh !important;
   }
 
   .work .category-tabs button {
